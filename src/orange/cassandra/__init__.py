@@ -1,0 +1,1 @@
+from orange.cassandra.model import *

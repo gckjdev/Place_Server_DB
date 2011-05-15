@@ -1,0 +1,41 @@
+/*
+*/
+drop keyspace PlaceKS;
+
+create keyspace PlaceKS
+	with replication_factor = 1
+    and placement_strategy = 'org.apache.cassandra.locator.SimpleStrategy';
+
+use PlaceKS;
+
+/**************** Model Column Family ****************/
+create column family User
+	with comparator = AsciiType;
+
+create column family Place
+	with comparator = AsciiType
+	and column_metadata=[
+		{column_name: owner, validation_class: UTF8Type, index_type: KEYS}
+	];
+
+create column family Post
+	with comparator = AsciiType;
+
+/**************** Index Column Family ****************/
+create column family IdxLoginName
+	with comparator = UTF8Type;
+
+create column family IdxUserPlaces
+	with comparator = TimeUUIDType;
+
+create column family IdxPlacePosts
+	with comparator = TimeUUIDType;
+
+create column family IdxPostReplies
+	with comparator = TimeUUIDType;
+
+create column family IdxUserPosts
+	with comparator = TimeUUIDType;
+
+create column family IdxUserTimeline
+    with comparator = TimeUUIDType;
