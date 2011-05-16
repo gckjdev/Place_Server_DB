@@ -1,1 +1,1 @@
-from orange.cassandra.model import *
+from orange.cassandra.orm import Model
