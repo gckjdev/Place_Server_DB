@@ -3,10 +3,17 @@ Created on 2011-5-16
 
 @author: James
 '''
+from django.http import HttpResponse
 import json
 
-def to_json(cls, obj):
-    return json.dumps(obj, default=cls.json_default)
+def get_json_response(obj, cls=None):
+    json_default = None
+    if cls:
+        json_default = cls.json_default
+    return HttpResponse(to_json(obj, json_default), content_type='application/json')
+
+def to_json(obj, default=None):
+    return json.dumps(obj, default=default)
 
 def _add_thumb(s):
     parts = s.split('.')

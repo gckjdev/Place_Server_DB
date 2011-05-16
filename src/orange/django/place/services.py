@@ -5,6 +5,7 @@ Created on 2011-5-3
 '''
 from datetime import datetime
 from orange.cassandra import db
+from orange.django.place.exceptions import UserExistError
 from orange.django.place.models import Post
 from orange.django.place.utils import IndexColumnFamily
 from pycassa.cassandra.ttypes import NotFoundException
@@ -16,10 +17,10 @@ def register_user(user):
     try:
         dt_count = dt_cf.get_count(user.device_token)
         if dt_count > 0:
-            return 'E-001'
+            raise UserExistError
         li_count = li_cf.get_count(user.login_id)
         if li_count > 0:
-            return 'E-002'
+            raise UserExistError
     except NotFoundException:
         pass
     user.register_time = datetime.now()
