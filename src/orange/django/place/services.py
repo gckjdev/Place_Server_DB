@@ -11,34 +11,31 @@ from orange.django.place.utils import IndexColumnFamily
 import uuid
 
 def register_user(user):
-    di_cf = db.get_column_family(IndexColumnFamily.IDX_DEVICE_ID)
-    li_cf = db.get_column_family(IndexColumnFamily.IDX_LOGIN_ID)
-    dt_count = di_cf.get_count(user.device_id)
-    if dt_count > 0:
+    di_count = db.get_column_count(IndexColumnFamily.IDX_DEVICE_ID, user.device_id)
+    if di_count > 0:
         raise UserExistError
-    li_count = li_cf.get_count(user.login_id)
+    li_count = db.get_column_count(IndexColumnFamily.IDX_LOGIN_ID, user.device_id)
     if li_count > 0:
         raise UserExistError
     user.register_time = datetime.now()
     user.save()
-    di_cf.insert(user.device_id, {user.id: ''})
-    li_cf.insert(user.login_id, {user.id: ''})
+    db.set_column_value(IndexColumnFamily.IDX_DEVICE_ID, user.device_id, user.id, '')
+    db.set_column_value(IndexColumnFamily.IDX_LOGIN_ID, user.login_id, user.id, '')
 
 def new_place(place):
-    uop_cf = db.get_column_family(IndexColumnFamily.IDX_USER_OWN_PLACES)
     place.create_time = datetime.now()
     place.save()
-    uop_cf.insert(place.user_id, {place.id: ''})
+    db.set_column_value(IndexColumnFamily.IDX_USER_OWN_PLACES, place.id, '')
 
-def new_post(place_id, post):
+def new_post(post):
     post.create_time = datetime.now()
     post.save()
-    db.set_column_value('PlacePosts', place_id, uuid.UUID(post.key), '')
+    db.set_column_value(IndexColumnFamily.IDX_PLACE_POSTS, post.place_id, uuid.UUID(post.id), '')
 
 def reply_post(place_id, post_id, reply):
     reply.thread_id = post_id
     new_post(place_id, reply)
-    db.set_column_value('PostReplies', post_id, uuid.UUID(reply.key), '')
+    db.set_column_value('PostReplies', post_id, uuid.UUID(reply.id), '')
 
 def get_entity(cls, key):
     return cls.objects.get(key)

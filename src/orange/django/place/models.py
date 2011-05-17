@@ -35,12 +35,16 @@ class Place(models.Model):
     desc = models.CharField(max_length=100)
 
 class Post(models.Model):
-    author = models.CharField(max_length=100)
-    content = models.CharField(max_length=100)
-    thread_id = models.CharField(max_length=100)
+    user_id = models.CharField(max_length=100)
+    app_id = models.CharField(max_length=50)
+    place_id = models.CharField(max_length=100)
+    content_type = models.IntegerField()
+    text_content = models.CharField(max_length=200)
     create_time = models.DateTimeField()
     longitude = models.FloatField()
     latitude = models.FloatField()
+    user_longitude = models.FloatField()
+    user_latitude = models.FloatField()
 
 class Photo(models.Model):
     object_id = models.CharField(max_length=100)
