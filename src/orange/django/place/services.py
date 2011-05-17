@@ -11,9 +11,9 @@ from orange.django.place.utils import IndexColumnFamily
 import uuid
 
 def register_user(user):
-    dt_cf = db.get_column_family(IndexColumnFamily.IDX_DEVICE_ID)
+    di_cf = db.get_column_family(IndexColumnFamily.IDX_DEVICE_ID)
     li_cf = db.get_column_family(IndexColumnFamily.IDX_LOGIN_ID)
-    dt_count = dt_cf.get_count(user.device_id)
+    dt_count = di_cf.get_count(user.device_id)
     if dt_count > 0:
         raise UserExistError
     li_count = li_cf.get_count(user.login_id)
@@ -21,12 +21,14 @@ def register_user(user):
         raise UserExistError
     user.register_time = datetime.now()
     user.save()
-    dt_cf.insert(user.device_id, {user.id: ''})
+    di_cf.insert(user.device_id, {user.id: ''})
     li_cf.insert(user.login_id, {user.id: ''})
 
 def new_place(place):
+    uop_cf = db.get_column_family(IndexColumnFamily.IDX_USER_OWN_PLACES)
     place.create_time = datetime.now()
     place.save()
+    uop_cf.insert(place.user_id, {place.id: ''})
 
 def new_post(place_id, post):
     post.create_time = datetime.now()

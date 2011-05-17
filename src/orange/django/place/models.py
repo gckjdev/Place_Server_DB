@@ -25,8 +25,9 @@ class User(models.Model):
 
 class Place(models.Model):
     name = models.CharField(max_length=100)
+    user_id = models.CharField(max_length=100)
     app_id = models.CharField(max_length=50)
-    create_time = models.DateTimeField(max_length=100)
+    create_time = models.DateTimeField()
     post_type = models.IntegerField()
     longitude = models.FloatField()
     latitude = models.FloatField()
