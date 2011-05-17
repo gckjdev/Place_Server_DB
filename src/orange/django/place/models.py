@@ -31,7 +31,7 @@ class Place(models.Model):
     longitude = models.FloatField()
     latitude = models.FloatField()
     radius = models.IntegerField()
-    desc = models.CharField(max_length=100, required=False)
+    desc = models.CharField(max_length=100)
 
 class Post(models.Model):
     author = models.CharField(max_length=100)
