@@ -43,7 +43,7 @@ class Post(models.Model):
     latitude = models.FloatField()
 
 class Photo(models.Model):
-    post_id = models.CharField(max_length=100)
+    object_id = models.CharField(max_length=100)
     caption = models.CharField(max_length=250, blank=True)
     image = ThumbnailImageField(upload_to='photos')
 
@@ -78,7 +78,7 @@ class UserAdmin(admin.ModelAdmin):
     list_display =('login_id', 'login_id_type', 'device_model')
 
 class PhotoAdmin(admin.ModelAdmin):
-    list_display = ('post_id', 'image', 'caption')
+    list_display = ('object_id', 'image', 'caption')
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Photo, PhotoAdmin)
