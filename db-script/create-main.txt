@@ -1,0 +1,14 @@
+use PlaceKS;
+
+create column family place_user
+	with comparator = AsciiType;
+
+create column family place_place
+	with comparator = AsciiType;
+
+create column family place_post
+	with comparator = AsciiType;
+
+create column family place_photo;
+    with comparator = AsciiType;
+

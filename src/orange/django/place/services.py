@@ -8,24 +8,20 @@ from orange.cassandra import db
 from orange.django.place.exceptions import UserExistError
 from orange.django.place.models import Post
 from orange.django.place.utils import IndexColumnFamily
-from pycassa.cassandra.ttypes import NotFoundException
 import uuid
 
 def register_user(user):
-    dt_cf = db.get_column_family(IndexColumnFamily.IDX_DEVICE_TOKEN)
+    dt_cf = db.get_column_family(IndexColumnFamily.IDX_DEVICE_ID)
     li_cf = db.get_column_family(IndexColumnFamily.IDX_LOGIN_ID)
-    try:
-        dt_count = dt_cf.get_count(user.device_token)
-        if dt_count > 0:
-            raise UserExistError
-        li_count = li_cf.get_count(user.login_id)
-        if li_count > 0:
-            raise UserExistError
-    except NotFoundException:
-        pass
+    dt_count = dt_cf.get_count(user.device_id)
+    if dt_count > 0:
+        raise UserExistError
+    li_count = li_cf.get_count(user.login_id)
+    if li_count > 0:
+        raise UserExistError
     user.register_time = datetime.now()
     user.save()
-    dt_cf.insert(user.device_token, {user.id: ''})
+    dt_cf.insert(user.device_id, {user.id: ''})
     li_cf.insert(user.login_id, {user.id: ''})
 
 def new_place(place):

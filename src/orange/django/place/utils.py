@@ -10,7 +10,9 @@ def get_json_response(obj, cls=None):
     json_default = None
     if cls:
         json_default = cls.json_default
-    return HttpResponse(to_json(obj, json_default), content_type='application/json')
+    json = to_json(obj, json_default)
+    print json
+    return HttpResponse(json, content_type='application/json')
 
 def to_json(obj, default=None):
     return json.dumps(obj, default=default)
@@ -23,5 +25,5 @@ def _add_thumb(s):
     return '.'.join(parts)
 
 class IndexColumnFamily():
-    IDX_DEVICE_TOKEN = 'idx_device_token'
+    IDX_DEVICE_ID = 'idx_device_id'
     IDX_LOGIN_ID = 'idx_login_id'

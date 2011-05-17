@@ -1,0 +1,17 @@
+use PlaceKS;
+
+truncate idx_login_id;
+
+truncate idx_device_id;
+
+truncate idx_user_own_places;
+
+truncate idx_user_follow_places;
+
+truncate idx_place_posts;
+
+truncate idx_post_replies;
+
+truncate idx_user_posts;
+
+truncate idx_user_timeline;

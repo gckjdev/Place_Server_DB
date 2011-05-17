@@ -25,11 +25,13 @@ class User(models.Model):
 
 class Place(models.Model):
     name = models.CharField(max_length=100)
-    owner = models.CharField(max_length=100)
-    caption = models.CharField(max_length=100)
+    app_id = models.CharField(max_length=50)
     create_time = models.DateTimeField(max_length=100)
+    post_type = models.IntegerField()
     longitude = models.FloatField()
     latitude = models.FloatField()
+    radius = models.IntegerField()
+    desc = models.CharField(max_length=100, required=False)
 
 class Post(models.Model):
     author = models.CharField(max_length=100)

@@ -1,0 +1,3 @@
+create keyspace PlaceKS
+    with replication_factor = 1
+    and placement_strategy = 'org.apache.cassandra.locator.SimpleStrategy';

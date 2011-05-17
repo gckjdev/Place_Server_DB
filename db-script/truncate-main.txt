@@ -1,0 +1,9 @@
+use PlaceKS;
+
+truncate place_user;
+
+truncate place_place;
+
+truncate place_post;
+
+truncate place_photo;
