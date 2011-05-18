@@ -25,7 +25,7 @@ def register_user(user):
 def new_place(place):
     place.create_time = datetime.utcnow()
     place.save()
-    db.set_column_value(IndexColumnFamily.IDX_USER_OWN_PLACES, place.id, '')
+    db.set_column_value(IndexColumnFamily.IDX_USER_OWN_PLACES, place.user_id, place.id, '')
 
 def new_post(post):
     post.create_time = datetime.utcnow()
