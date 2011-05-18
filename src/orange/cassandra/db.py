@@ -25,9 +25,9 @@ def set_column_value(cf_name, key, column_name, value):
     cf = pycassa.ColumnFamily(get_pool(), cf_name)
     cf.insert(key, {column_name: value})
 
-def get_column_count(cf_name, key, colum_name):
+def get_column_count(cf_name, key):
     cf = pycassa.ColumnFamily(get_pool(), cf_name)
-    cf.get_count(key, [colum_name])
+    cf.get_count(key)
 
 def get_columns(cf_name, key):
     cf = pycassa.ColumnFamily(get_pool(), cf_name)

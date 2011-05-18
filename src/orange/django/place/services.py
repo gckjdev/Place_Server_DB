@@ -17,20 +17,21 @@ def register_user(user):
     li_count = db.get_column_count(IndexColumnFamily.IDX_LOGIN_ID, user.device_id)
     if li_count > 0:
         raise UserExistError
-    user.register_time = datetime.now()
+    user.register_time = datetime.utcnow()
     user.save()
     db.set_column_value(IndexColumnFamily.IDX_DEVICE_ID, user.device_id, user.id, '')
     db.set_column_value(IndexColumnFamily.IDX_LOGIN_ID, user.login_id, user.id, '')
 
 def new_place(place):
-    place.create_time = datetime.now()
+    place.create_time = datetime.utcnow()
     place.save()
     db.set_column_value(IndexColumnFamily.IDX_USER_OWN_PLACES, place.id, '')
 
 def new_post(post):
-    post.create_time = datetime.now()
+    post.create_time = datetime.utcnow()
     post.save()
     db.set_column_value(IndexColumnFamily.IDX_PLACE_POSTS, post.place_id, uuid.UUID(post.id), '')
+    db.set_column_value(IndexColumnFamily.IDX_USER_POSTS, post.user_id, uuid.UUID(post.id), '')
 
 def reply_post(place_id, post_id, reply):
     reply.thread_id = post_id
