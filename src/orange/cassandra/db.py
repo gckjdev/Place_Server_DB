@@ -5,7 +5,7 @@ Created on 2011-5-5
 '''
 import pycassa
 
-def get_pool(keyspace='PlaceKS', servers=['192.168.1.101:9160']):
+def get_pool(keyspace='PlaceKS', servers=['localhost:9160']):
     return pycassa.connect(keyspace, servers)
 
 def get_column_family(cf_name):

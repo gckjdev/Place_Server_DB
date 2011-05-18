@@ -46,8 +46,7 @@ def get_all_entities(cls):
 
 def get_place_posts(place_id, before, max_count):
     post_id_dict = db.get_columns(IndexColumnFamily.IDX_PLACE_POSTS, place_id, column_start=uuid.UUID(before), column_count=max_count)
-    ids = [str(key) for key in post_id_dict.keys()]
-    return db.multi_get('place_post', ids);
+    return [Post.objects.get(id=key) for key in post_id_dict.keys()];
 
 def get_post_replies(post_id):
     reply_id_dict = db.get_columns('PostReplies', post_id)
