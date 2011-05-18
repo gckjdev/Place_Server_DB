@@ -44,13 +44,10 @@ def get_entity(cls, key):
 def get_all_entities(cls):
     return cls.objects.all()
 
-def get_place_posts(place_id):
-    post_id_dict = db.get_columns('PlacePosts', place_id)
-    posts = []
-    for key in post_id_dict.keys():
-        post = Post.objects.get(key.get_hex())
-        posts.append(post)
-    return posts;
+def get_place_posts(place_id, before, max_count):
+    post_id_dict = db.get_columns(IndexColumnFamily.IDX_PLACE_POSTS, place_id, column_start=uuid.UUID(before), column_count=max_count)
+    ids = [str(key) for key in post_id_dict.keys()]
+    return db.multi_get('place_post', ids);
 
 def get_post_replies(post_id):
     reply_id_dict = db.get_columns('PostReplies', post_id)

@@ -29,6 +29,10 @@ def get_column_count(cf_name, key):
     cf = pycassa.ColumnFamily(get_pool(), cf_name)
     cf.get_count(key)
 
-def get_columns(cf_name, key):
+def get_columns(cf_name, key, column_start='', column_count=30):
     cf = pycassa.ColumnFamily(get_pool(), cf_name)
-    return cf.get(key)
+    return cf.get(key, column_reversed=True, column_start=column_start, column_count=column_count)
+
+def multi_get(cf_name, keys):
+    cf = pycassa.ColumnFamily(get_pool(), cf_name)
+    return cf.multiget(keys)
