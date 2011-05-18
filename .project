@@ -3,7 +3,6 @@
 	<name>place-db</name>
 	<comment></comment>
 	<projects>
-		<project>django_cassandra_backend</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
