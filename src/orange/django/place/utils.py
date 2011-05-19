@@ -16,8 +16,8 @@ def get_json_response(obj, cls=None):
     if cls:
         json_default = cls.json_default
     obj_json = json.dumps(obj, default=json_default)
-    __logger.debug(obj_json)
-    return HttpResponse(obj_json, content_type='application/json')
+    __logger.debug('[SEND RESPONSE] %s' % obj_json)
+    return HttpResponse(obj_json, content_type='text/json')
 
 def get_dj_settings():
     settings = os.environ['DJANGO_SETTINGS_MODULE']

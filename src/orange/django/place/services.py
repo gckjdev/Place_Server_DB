@@ -5,22 +5,30 @@ Created on 2011-5-3
 '''
 from datetime import datetime
 from orange.cassandra import db
-from orange.place.errors import ErrorException
-from orange.place import errors
-from orange.django.place.models import Post
 from orange.django.place import IdxCF
+from orange.django.place.models import Post
+from orange.logging import paramlog
+from orange.place import errors
+from orange.place.errors import ErrorException
+import logging
 import uuid
 
-def register_user(user):
+__logger = logging.getLogger(__name__)
+
+def register_user(user): 
     di_count = db.get_column_count(IdxCF.IDX_DEVICE_ID, user.device_id)
-    li_count = db.get_column_count(IdxCF.IDX_LOGIN_ID, user.device_id)
+    li_count = db.get_column_count(IdxCF.IDX_LOGIN_ID, user.login_id)
+    #__logger.debug('<register_user> device count=%d, login_id count=%d' % (di_count, li_count))    
     if di_count > 0 and li_count > 0:
+        __logger.warning('<register_user> login_id(%s) and device(%s) both exist' % (user.login_id, user.device_id))
         raise ErrorException(errors.ERROR_LOGINID_DEVICE_BOTH_EXIST)
     elif li_count > 0:
+        __logger.warning('<register_user> login_id(%s) exist' % user.login_id)
         raise ErrorException(errors.ERROR_LOGINID_EXIST)
     elif di_count > 0: 
+        __logger.warning('<register_user> device(%s) exist' % user.device_id)
         raise ErrorException(errors.ERROR_DEVICEID_EXIST) 
-    user.register_time = datetime.utcnow()
+    user.create_date = datetime.utcnow()
     user.save()
     db.set_column_value(IdxCF.IDX_DEVICE_ID, user.device_id, user.id, '')
     db.set_column_value(IdxCF.IDX_LOGIN_ID, user.login_id, user.id, '')
