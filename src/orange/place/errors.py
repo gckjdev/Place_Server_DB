@@ -16,6 +16,7 @@ ERROR_SUCCESS = 0
 
 # Parameter Error
 ERROR_PARAMETER                 = 10001
+ERROR_PARA_METHOD_NOT_FOUND     = 10002
 
 # User Errors
 ERROR_LOGINID_EXIST             = 20001
@@ -35,9 +36,6 @@ ERROR_CASSANDRA                 = 80001
 
 # System Error
 ERROR_SYSTEM                    = 90001
+ERROR_NOT_GET_METHOD            = 90002
 
 # The following Erros are to be deleted
-PARAM_ERROR = 4002
-AUTH_ERROR = 4003
-
-INTERNAL_ERROR = 5001
