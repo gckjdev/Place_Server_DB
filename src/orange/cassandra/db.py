@@ -4,6 +4,7 @@ Created on 2011-5-5
 @author: James
 '''
 from orange.django.place.utils import get_dj_settings
+from orange.logging import paramlog
 from pycassa.cassandra.ttypes import NotFoundException
 import logging
 import pycassa
@@ -33,17 +34,18 @@ def create_index_clause(conditions):
         expressions.append(expression)
     return pycassa.create_index_clause(expressions)
 
+@paramlog
 def set_column_value(cf_name, key, column_name, value):
-    __logger.debug('set_column_value: cf_name=%s, key=%s, column_name=%s, value=%s', cf_name, key, column_name, value)
     cf = pycassa.ColumnFamily(__pool, cf_name)
     cf.insert(key, {column_name: value})
 
+@paramlog
 def get_column_count(cf_name, key):
     cf = pycassa.ColumnFamily(__pool, cf_name)
     cf.get_count(key)
 
+@paramlog
 def get_columns(cf_name, key, column_start='', column_count=30):
-    __logger.debug('get_columns: cf_name=%s, key=%s, column_start=%s, column_count=%s', cf_name, key, column_start, column_count)
     cf = pycassa.ColumnFamily(__pool, cf_name)
     try:
         ret = cf.get(key, column_reversed=True, column_start=column_start, column_count=column_count)
@@ -51,6 +53,8 @@ def get_columns(cf_name, key, column_start='', column_count=30):
         ret = {}
     return ret
 
+@paramlog
 def multi_get(cf_name, keys):
     cf = pycassa.ColumnFamily(__pool, cf_name)
     return cf.multiget(keys)
+
