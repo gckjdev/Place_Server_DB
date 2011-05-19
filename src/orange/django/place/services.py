@@ -5,18 +5,21 @@ Created on 2011-5-3
 '''
 from datetime import datetime
 from orange.cassandra import db
-from orange.django.place.exceptions import UserExistError
+from orange.place.errors import ErrorException
+from orange.place import errors
 from orange.django.place.models import Post
 from orange.django.place.utils import IndexColumnFamily
 import uuid
 
 def register_user(user):
     di_count = db.get_column_count(IndexColumnFamily.IDX_DEVICE_ID, user.device_id)
-    if di_count > 0:
-        raise UserExistError
     li_count = db.get_column_count(IndexColumnFamily.IDX_LOGIN_ID, user.device_id)
-    if li_count > 0:
-        raise UserExistError
+    if di_count > 0 and li_count > 0:
+        raise ErrorException(errors.ERROR_LOGINID_DEVICE_BOTH_EXIST)
+    elif li_count > 0:
+        raise ErrorException(errors.ERROR_LOGINID_EXIST)
+    elif di_count > 0: 
+        raise ErrorException(errors.ERROR_DEVICEID_EXIST) 
     user.register_time = datetime.utcnow()
     user.save()
     db.set_column_value(IndexColumnFamily.IDX_DEVICE_ID, user.device_id, user.id, '')
