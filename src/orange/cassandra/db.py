@@ -18,8 +18,6 @@ if settings:
 def get_pool():
     return pycassa.connect(__keyspace, __servers)
 
-print get_pool()
-
 def get_column_family(cf_name):
     return pycassa.ColumnFamily(get_pool(), cf_name, autopack_names=False, autopack_values=False)
 
