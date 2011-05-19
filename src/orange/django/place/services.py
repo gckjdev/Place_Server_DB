@@ -17,18 +17,18 @@ def register_user(user):
     li_count = db.get_column_count(IndexColumnFamily.IDX_LOGIN_ID, user.device_id)
     if li_count > 0:
         raise UserExistError
-    user.register_time = datetime.utcnow()
+    user.create_date = datetime.utcnow()
     user.save()
     db.set_column_value(IndexColumnFamily.IDX_DEVICE_ID, user.device_id, user.id, '')
     db.set_column_value(IndexColumnFamily.IDX_LOGIN_ID, user.login_id, user.id, '')
 
 def new_place(place):
-    place.create_time = datetime.utcnow()
+    place.create_date = datetime.utcnow()
     place.save()
     db.set_column_value(IndexColumnFamily.IDX_USER_OWN_PLACES, place.user_id, place.id, '')
 
 def new_post(post):
-    post.create_time = datetime.utcnow()
+    post.create_date = datetime.utcnow()
     post.save()
     db.set_column_value(IndexColumnFamily.IDX_PLACE_POSTS, post.place_id, uuid.UUID(post.id), '')
     db.set_column_value(IndexColumnFamily.IDX_USER_POSTS, post.user_id, uuid.UUID(post.id), '')
@@ -49,9 +49,9 @@ def get_place_posts(place_id, before, max_count):
         start_column = ""
     else:
         start_column = uuid.UUID(before)
-        
+
     post_id_dict = db.get_columns(IndexColumnFamily.IDX_PLACE_POSTS, place_id, column_start=start_column, column_count=max_count)
-        
+
     return [Post.objects.get(id=key) for key in post_id_dict.keys()];
 
 def get_post_replies(post_id):

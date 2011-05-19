@@ -4,8 +4,11 @@ Created on 2011-5-5
 @author: James
 '''
 from orange.django.place.utils import get_dj_settings
-import pycassa
 from pycassa.cassandra.ttypes import NotFoundException
+import logging
+import pycassa
+
+__logger = logging.getLogger(__name__)
 
 __servers = ['localhost:9160']
 __keyspace = 'PlaceKS'
@@ -32,7 +35,7 @@ def create_index_clause(conditions):
     return pycassa.create_index_clause(expressions)
 
 def set_column_value(cf_name, key, column_name, value):
-    print 'set_column_value, cf_name=', cf_name, ',key=', key, ",column_name=", column_name, ',value=', value
+    __logger.debug('set_column_value: cf_name=%s, key=%s, column_name=%s, value=%s', cf_name, key, column_name, value)
     cf = pycassa.ColumnFamily(get_pool(), cf_name)
     cf.insert(key, {column_name: value})
 
