@@ -42,7 +42,7 @@ def set_column_value(cf_name, key, column_name, value):
 @paramlog
 def get_column_count(cf_name, key):
     cf = pycassa.ColumnFamily(__pool, cf_name)
-    cf.get_count(key)
+    return cf.get_count(key)
 
 @paramlog
 def get_columns(cf_name, key, column_start='', column_count=30):
