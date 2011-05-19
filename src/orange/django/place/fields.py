@@ -6,16 +6,15 @@ Created on 2011-5-16
 from PIL import Image
 from django.db import models
 from django.db.models.fields.files import ImageFieldFile
-from orange.django.place.utils import _add_thumb
 import os.path
 
 class ThumbnailImageFieldFile(ImageFieldFile):
 
     def _get_thumb_path(self):
-        return _add_thumb(self.path)
+        return __add_thumb(self.path)
 
     def _get_thumb_url(self):
-        return _add_thumb(self.url)
+        return __add_thumb(self.url)
 
     thumb_path = property(_get_thumb_path)
     thumb_url = property(_get_thumb_url)
@@ -39,3 +38,10 @@ class ThumbnailImageField(models.ImageField):
         self.thumb_width = thumb_width
         self.thumb_height = thumb_height
         super(ThumbnailImageField, self).__init__(*args, **kwargs)
+
+def __add_thumb(image_nmae):
+    parts = image_nmae.split('.')
+    parts.insert(-1, 'thumb')
+    if parts[-1].lower() not in ['jpeg', 'jpg']:
+        parts[-1] = 'jpg'
+    return '.'.join(parts)
