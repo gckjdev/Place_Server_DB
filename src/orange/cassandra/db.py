@@ -4,8 +4,9 @@ Created on 2011-5-5
 @author: James
 '''
 import pycassa
+from pycassa.cassandra.ttypes import NotFoundException
 
-def get_pool(keyspace='PlaceKS', servers=['localhost:9160']):
+def get_pool(keyspace='PlaceKS', servers=['192.168.1.101:9160']):
     return pycassa.connect(keyspace, servers)
 
 def get_column_family(cf_name):
@@ -22,6 +23,7 @@ def create_index_clause(conditions):
     return pycassa.create_index_clause(expressions)
 
 def set_column_value(cf_name, key, column_name, value):
+    print 'set_column_value, cf_name=', cf_name, ',key=', key, ",column_name=", column_name, ',value=', value
     cf = pycassa.ColumnFamily(get_pool(), cf_name)
     cf.insert(key, {column_name: value})
 
@@ -31,7 +33,11 @@ def get_column_count(cf_name, key):
 
 def get_columns(cf_name, key, column_start='', column_count=30):
     cf = pycassa.ColumnFamily(get_pool(), cf_name)
-    return cf.get(key, column_reversed=True, column_start=column_start, column_count=column_count)
+    try:
+        ret = cf.get(key, column_reversed=True, column_start=column_start, column_count=column_count)
+    except NotFoundException:
+        ret = {}
+    return ret
 
 def multi_get(cf_name, keys):
     cf = pycassa.ColumnFamily(get_pool(), cf_name)

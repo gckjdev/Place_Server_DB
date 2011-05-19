@@ -45,7 +45,13 @@ def get_all_entities(cls):
     return cls.objects.all()
 
 def get_place_posts(place_id, before, max_count):
-    post_id_dict = db.get_columns(IndexColumnFamily.IDX_PLACE_POSTS, place_id, column_start=uuid.UUID(before), column_count=max_count)
+    if (before) or (len(before) == 0):
+        start_column = ""
+    else:
+        start_column = uuid.UUID(before)
+        
+    post_id_dict = db.get_columns(IndexColumnFamily.IDX_PLACE_POSTS, place_id, column_start=start_column, column_count=max_count)
+        
     return [Post.objects.get(id=key) for key in post_id_dict.keys()];
 
 def get_post_replies(post_id):
