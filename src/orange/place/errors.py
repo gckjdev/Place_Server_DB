@@ -33,6 +33,7 @@ ERROR_POST_NOT_FOUND            = 40001
 
 # DB Error
 ERROR_CASSANDRA                 = 80001
+ERROR_CASSANDRA_UNAVAILABLE     = 80002
 
 # System Error
 ERROR_SYSTEM                    = 90001
