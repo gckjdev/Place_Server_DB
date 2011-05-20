@@ -6,8 +6,7 @@ Created on 2011-5-3
 from datetime import datetime
 from orange.cassandra import db
 from orange.django.place import IdxCF
-from orange.django.place.models import Post
-from orange.logging import paramlog
+from orange.django.place.models import Post, Place
 from orange.place import errors
 from orange.place.errors import ErrorException
 import logging
@@ -64,6 +63,9 @@ def get_place_posts(place_id, before, max_count):
     post_id_dict = db.get_columns(IdxCF.IDX_PLACE_POSTS, place_id, column_start=start_column, column_count=max_count)
 
     return [Post.objects.get(id=key) for key in post_id_dict.keys()];
+
+def get_nearby_places(latitude, longtitude):
+    return Place.objects.all() #TODO: 
 
 def get_post_replies(post_id):
     reply_id_dict = db.get_columns('PostReplies', post_id)
