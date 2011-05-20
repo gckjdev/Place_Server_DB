@@ -1,25 +1,28 @@
 use PlaceKS;
 
 create column family idx_login_id
-	with comparator = UTF8Type;
-
-create column family idx_device_id
-	with comparator = UTF8Type;
-
-create column family idx_user_own_places
     with comparator = UTF8Type;
 
+create column family idx_device_id
+    with comparator = UTF8Type;
+
+create column family idx_user_own_places
+    with comparator = TimeUUIDType;
+
 create column family idx_user_follow_places
-	with comparator = TimeUUIDType;
+    with comparator = TimeUUIDType;
+
+create column family idx_place_followed_users
+    with comparator = TimeUUIDType;
 
 create column family idx_place_posts
-	with comparator = TimeUUIDType;
+    with comparator = TimeUUIDType;
 
 create column family idx_post_replies
-	with comparator = TimeUUIDType;
+    with comparator = TimeUUIDType;
 
 create column family idx_user_posts
-	with comparator = TimeUUIDType;
+    with comparator = TimeUUIDType;
 
 create column family idx_user_timeline
     with comparator = TimeUUIDType;

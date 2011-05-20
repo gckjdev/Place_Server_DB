@@ -42,6 +42,11 @@ def new_post(post):
     post.save()
     db.set_column_value(IdxCF.IDX_PLACE_POSTS, post.place_id, uuid.UUID(post.id), '')
     db.set_column_value(IdxCF.IDX_USER_POSTS, post.user_id, uuid.UUID(post.id), '')
+    followed_count = db.get_column_count(IdxCF.IDX_PLACE_FOLLOWED_USERS, post.place_id)
+    if followed_count > 0:
+        user_id_dict = db.get_columns(IdxCF.IDX_PLACE_FOLLOWED_USERS, post.place_id, column_count=followed_count)
+        for user_id in user_id_dict.keys():
+            db.set_column_value(IdxCF.IDX_USER_TIMELINE, str(user_id), uuid.UUID(post.id), '')
 
 def reply_post(place_id, post_id, reply):
     reply.thread_id = post_id
@@ -66,6 +71,10 @@ def get_place_posts(place_id, before, max_count):
 
 def get_nearby_places(latitude, longtitude):
     return Place.objects.all() #TODO: 
+
+def user_follow_place(user_id, place_id):
+    db.set_column_value(IdxCF.IDX_USER_FOLLOW_PLACES, user_id, uuid.UUID(place_id), '')
+    db.set_column_value(IdxCF.IDX_PLACE_FOLLOWED_USERS, place_id, uuid.UUID(user_id), '')
 
 def get_post_replies(post_id):
     reply_id_dict = db.get_columns('PostReplies', post_id)
